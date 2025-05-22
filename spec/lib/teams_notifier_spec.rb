@@ -1,4 +1,6 @@
-require 'rails_helper'
+# spec/lib/teams_notifier_spec.rb
+
+require File.expand_path('../../../../../spec/rails_helper', __FILE__)
 require 'webmock/rspec'
 
 RSpec.describe DueNotificationsWebhook::TeamsNotifier, type: :model do
