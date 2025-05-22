@@ -84,6 +84,7 @@ class DueNotificationsWebhookController < ApplicationController
 
     render json: { message: "#{label_due_notifications_sent}: #{count_sent}" }
   rescue => e
+    label_due_notifications_error = I18n.t('label_due_notifications_error')
     render json: { message: "#{label_due_notifications_error} #{e.message}" }, status: 500
   end
 end

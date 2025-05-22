@@ -28,6 +28,7 @@ module DueNotificationsWebhook
       end
       response
     rescue => e
+      label_due_notifications_teams_error = I18n.t('label_due_notifications_teams_error')
       Rails.logger.error "#{label_due_notifications_teams_error} #{e.message}"
       nil
     end
