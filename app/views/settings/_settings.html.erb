@@ -1,0 +1,65 @@
+<fieldset class="box tabular">
+  <p>
+    <label for="settings_send_time"><%= l(:label_due_notifications_send_time) %></label><br />
+    <%= text_field_tag 'settings[send_time]', @settings['send_time'], placeholder: 'HH:MM (24h)' %>
+    <br /><em><%= l(:label_due_notifications_example_time) %></em>
+    <br /><strong><%= l(:label_due_notifications_current_server_time) %>:</strong> <%= Time.now.strftime("%H:%M %d-%m-%Y") %>
+  </p>
+
+  <p>
+    <label for="settings_webhook_url"><%= l(:label_due_notifications_webhook_url) %></label><br />
+    <%= text_field_tag 'settings[webhook_url]', @settings['webhook_url'], placeholder: 'https://outlook.office.com/webhook/...' %>
+  </p>
+
+  <p>
+    <label for="settings_days_before_due"><%= l(:label_due_notifications_days_before_due) %></label><br />
+    <%= number_field_tag 'settings[days_before_due]', @settings['days_before_due'], min: 1, step: 1 %>
+  </p>
+
+  <p>
+    <label for="settings_days_after_due"><%= l(:label_due_notifications_days_after_due) %></label><br />
+    <%= number_field_tag 'settings[days_after_due]', @settings['days_after_due'], min: 1, step: 1 %>
+  </p>
+
+  <p>
+    <%= button_tag l(:label_due_notifications_button_send_now), type: 'button', id: 'due_notifications_send_now', class: 'icon icon-email' %> 
+    <br /><em style="margin:0 0 0 20px"><%= l(:label_due_notifications_send_trigger) %></em>
+  </p>
+</fieldset>
+
+<%= javascript_tag do %>
+  document.addEventListener("DOMContentLoaded", function() {
+    var sendNowBtn = document.getElementById('due_notifications_send_now');
+    if(sendNowBtn) {
+      sendNowBtn.addEventListener('click', function() {
+        sendNowBtn.disabled = true;
+        sendNowBtn.innerText = "<%= j l(:label_due_notifications_button_send_now) %>...";
+
+        const url = '<%= url_for(controller: "due_notifications_webhook", action: "send_now") %>';
+        const fetchOptions = {
+          method: "POST",
+          headers: {
+            'X-CSRF-Token': '<%= form_authenticity_token %>',
+            'Content-Type': 'application/json'
+          },
+          credentials: 'same-origin'
+        };
+
+        fetch(url, fetchOptions)
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          alert(data.message || "<%= j l(:label_due_notifications_sent) %>!");
+        })
+        .catch(error => {
+          alert("<%= j l(:label_due_notifications_error) %> " + error);
+        })
+        .finally(() => {
+          sendNowBtn.disabled = false;
+          sendNowBtn.innerText = "<%= j l(:label_due_notifications_button_send_now) %>";
+        });
+      });
+    }
+  });
+<% end %>
