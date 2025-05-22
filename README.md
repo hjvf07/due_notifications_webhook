@@ -57,3 +57,12 @@ On the plugin settings page, you can configure:
 #### Cron runs the task every 5 minutes.
 #### The plugin itself checks the time and sends notifications only at the time specified in the settings (e.g., 09:00).
 #### All output is logged to log/due_notifications_webhook.log
+```
+
+## How to create Webhooks for MS Teams
+
+1. Active license for Office 365 Business package
+2. Create account on https://powerautomate.com/ with corporate email
+3. Create new flow
+3.1. Choose Create tab on sidebar
+3.2. Select "Instant cloud flow"
