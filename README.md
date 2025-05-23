@@ -61,7 +61,9 @@ On the plugin settings page, you can configure:
 #### The plugin itself checks the time and sends notifications only at the time specified in the settings (e.g., 09:00).
 #### All output is logged to log/due_notifications_webhook.log
 
-#### Structure of the plugin
+---
+
+## Structure of the plugin
 
 ```sh
 redmine_due_notifications_webhook/
@@ -101,7 +103,7 @@ redmine_due_notifications_webhook/
 ├── init.rb
 └── README.md
 ```
-#### Running the test
+> **Running the test**
 
 ```sh
 bin/rspec plugins/due_notifications_webhook/spec/lib/teams_notifier_spec.rb
