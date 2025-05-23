@@ -101,3 +101,8 @@ redmine_due_notifications_webhook/
 ├── init.rb
 └── README.md
 ```
+#### Running the test
+
+```sh
+bin/rspec plugins/due_notifications_webhook/spec/lib/teams_notifier_spec.rb
+```
