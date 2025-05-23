@@ -3,7 +3,6 @@ require File.expand_path('../../test_helper', __FILE__)
 class DueNotificationsWebhook::TeamsNotifierTest < ActiveSupport::TestCase
   def setup
     @webhook_url = "https://example.com/webhook"
-    @issue_url = "https://redmine.test/issues/1"
     @title = "Test Notification"
     @body = "This is a test notification"
   end
@@ -23,8 +22,7 @@ class DueNotificationsWebhook::TeamsNotifierTest < ActiveSupport::TestCase
         result = DueNotificationsWebhook::TeamsNotifier.send(
           @webhook_url,
           title: @title,
-          body: @body,
-          issue_url: @issue_url
+          body: @body
         )
         assert result.is_a?(Net::HTTPResponse)
         assert_equal "200", result.code

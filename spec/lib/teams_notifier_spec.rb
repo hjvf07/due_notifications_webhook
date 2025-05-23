@@ -1,11 +1,10 @@
-require 'rails_helper'
+require File.expand_path('../../../../../spec/rails_helper', __FILE__)
 require 'webmock/rspec'
 
 RSpec.describe DueNotificationsWebhook::TeamsNotifier, type: :model do
   let(:webhook_url) { "https://example.com/webhook" }
   let(:title) { "Test Notification" }
   let(:body) { "This is a test notification" }
-  let(:issue_url) { "https://redmine.example.com/issues/1" }
 
   it "sends a POST request to the webhook URL" do
     stub = stub_request(:post, webhook_url)
@@ -18,8 +17,7 @@ RSpec.describe DueNotificationsWebhook::TeamsNotifier, type: :model do
     response = described_class.send(
       webhook_url,
       title: title,
-      body: body,
-      issue_url: issue_url
+      body: body
     )
 
     expect(response.code).to eq("200")
@@ -33,19 +31,17 @@ RSpec.describe DueNotificationsWebhook::TeamsNotifier, type: :model do
     described_class.send(
       webhook_url,
       title: title,
-      body: body,
-      issue_url: issue_url
+      body: body
     )
   end
 
   it "logs an exception if something goes wrong" do
     expect(Net::HTTP).to receive(:new).and_raise(StandardError.new("fail!"))
-    expect(Rails.logger).to receive(:error).with(/Teams Webhook exception: fail!/)
+    expect(Rails.logger).to receive(:error).with(/Teams Webhook error: fail!/)
     described_class.send(
       webhook_url,
       title: title,
-      body: body,
-      issue_url: issue_url
+      body: body
     )
   end
 end
