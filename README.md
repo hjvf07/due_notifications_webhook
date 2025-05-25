@@ -49,10 +49,13 @@ On the plugin settings page, you can configure:
 
 ```sh
 */5 * * * * docker exec -i redmine-6 bash -c "cd /usr/src/redmine && PATH=/usr/local/bundle/bin:/usr/local/bin:/usr/bin:/bin && bundle exec rake due_notifications_webhook:send_notifications >> /usr/src/redmine/log/due_notifications_webhook.log 2>&1"
+```
 
 #### If running Redmine directly (no Docker):
 
+```sh
 */5 * * * * cd /path/to/redmine && PATH=/usr/local/bundle/bin:/usr/local/bin:/usr/bin:/bin && bundle exec rake due_notifications_webhook:send_notifications >> log/due_notifications_webhook.log 2>&1
+```
 
 #### Cron runs the task every 5 minutes.
 #### The plugin itself checks the time and sends notifications only at the time specified in the settings (e.g., 09:00).
@@ -66,3 +69,52 @@ On the plugin settings page, you can configure:
 3. Create new flow
 3.1. Choose Create tab on sidebar
 3.2. Select "Instant cloud flow"
+
+---
+
+## Structure of the plugin
+
+```sh
+redmine_due_notifications_webhook/
+├── app/
+│   └── controllers/
+│        └── due_notifications_webhook_controller.rb
+│   └── views/
+│        └── settings/
+│             └── _settings.html.erb
+│
+├── config/
+│   └── locales/
+│        ├── en.yml
+│        ├── ja.yml
+│        └── uk.yml
+│   └── routes.rb
+│
+├── lib/
+│   └── due_notifications_webhook/
+│        ├── message_templates.rb
+│        └── teams_notifier.rb
+│   └── tasks/
+│        └── due_notifications_webhook.rake
+│
+├── spec/
+│   └── lib/
+│        └── teams_notifier_spec.rb
+│   └── rails_helper.rb
+│
+├── test/
+│   └── unit/
+│       ├── send_notifications_task_test.rb
+│       └── teams_notifier_test.rb
+│
+├── Gemfile.local
+├── .rspec
+├── init.rb
+└── README.md
+```
+> **Running the test**
+
+```sh
+bin/rspec plugins/due_notifications_webhook/spec/lib/teams_notifier_spec.rb
+```
+123
