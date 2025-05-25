@@ -60,15 +60,79 @@ On the plugin settings page, you can configure:
 #### Cron runs the task every 5 minutes.
 #### The plugin itself checks the time and sends notifications only at the time specified in the settings (e.g., 09:00).
 #### All output is logged to log/due_notifications_webhook.log
+
+---
+
+# How to configure Webhooks for MS Teams
+This guide explains how to configure Microsoft Power Automate (Flow) to receive external webhook data and post it as a message in a Microsoft Teams channel using the MessageCard format.
+
+---
+
+## ✅ Prerequisites
+
+- A valid Microsoft 365 account (Business package) with access to **Power Automate** and **Microsoft Teams**.
+- Permission to create flows in Power Automate.
+- Permission to post messages in the target Microsoft Teams channel.
+- Access to create **Incoming Webhooks** in MS Teams.
+
+---
+
+## 1. Register on Microsoft Power Automate
+
+1. Go to [https://powerautomate.microsoft.com](https://powerautomate.microsoft.com).
+2. Click **Sign In** (or **Start free** if you don’t have an account).
+3. Sign in with your Microsoft 365 credentials or create a new account.
+4. Once logged in, you will be redirected to the Power Automate Dashboard.
+
+---
+
+## 2. Create an Instant Cloud Flow to Handle Webhook and Post to MS Teams
+
+### Step-by-step Instructions:
+
+1. In Power Automate Dashboard, click **Create** > **Instant cloud flow**.
+2. Name the flow, e.g., `PostWebhookToTeams`.
+3. Choose **"When an HTTP request is received"** as the trigger.
+4. Click **Create**.
+
+---
+
+### 2.1 Configure the HTTP Trigger
+
+1. After flow is created, click on the HTTP trigger block.
+2. In Parametrs set "Anyone" (Who can trigger the flow?)
+
+### 2.2 Configure the Parse JSON
+1. Click on "+" after the HTTP trigger block and add block "Parse JSON"
+2. To Content field add "Body" variable through clicking on "Lightning" icon on the right of field
+2. Click **Use sample payload to generate schema**.
+3. Paste the following example JSON:
+```json
+{
+    "@type": "MessageCard",
+    "@context": "http://schema.org/extensions",
+    "summary": "⚠️ Overdue Issue!!!",
+    "themeColor": "0078D7",
+    "title": "⚠️ Overdue Issue!!!",
+    "text": "<b>⚠️ Overdue Issue!!!</b>\n<hr/>\n<b>🔖 Subject:</b> <a href=\"http://localhost:3000/issues/11\">🔗 #11 - dfgdsf</a><br/>\n<b>📁 Project:</b> test01<br/>\n<b>🧑 Assignee:</b> Roman Kharcenko<br/>\n<b>📅 Due date:</b> 2025-05-22<br/>\n<hr/>\n<i>The issue is already overdue <b>** 3 days **!</b> It is urgently necessary to perform!!!</i>\n"
+}
 ```
+4. Click Done to auto-generate the schema.
 
-## How to create Webhooks for MS Teams
+### 2.3 Add an Action: Post to Microsoft Teams
+1. Click + New Step.
+2. Search for Microsoft Teams.
+3. Select "Post a message in a chat or channel".
+4. Choose:
+    - Post as: User (or Flow bot if preferred)
+    - Post in: Channel
+    - Team: Select your target Team
+    - Channel: Select the target Channel
 
-1. Active license for Office 365 Business package
-2. Create account on https://powerautomate.com/ with corporate email
-3. Create new flow
-3.1. Choose Create tab on sidebar
-3.2. Select "Instant cloud flow"
+### 2.4 Save and Get the Webhook URL
+1. Click Save at the top.
+2. Copy the HTTP POST URL that appears in the trigger section.
+3. This is your webhook endpoint. You can now send POST requests to it with your JSON payload.
 
 ---
 
@@ -117,4 +181,3 @@ redmine_due_notifications_webhook/
 ```sh
 bin/rspec plugins/due_notifications_webhook/spec/lib/teams_notifier_spec.rb
 ```
-123
