@@ -91,8 +91,18 @@ This guide explains how to configure Microsoft Power Automate (Flow) to receive 
 ### Step-by-step Instructions:
 
 1. In Power Automate Dashboard, click **Create** > **Instant cloud flow**.
+
+![Create](app/images/01.png)
+![Create](app/images/02.png)
+
 2. Name the flow, e.g., `PostWebhookToTeams`.
+
+![Create](app/images/03.png)
+
 3. Choose **"When an HTTP request is received"** as the trigger.
+
+![Create](app/images/04.png)
+
 4. Click **Create**.
 
 ---
@@ -100,13 +110,25 @@ This guide explains how to configure Microsoft Power Automate (Flow) to receive 
 ### 2.1 Configure the HTTP Trigger
 
 1. After flow is created, click on the HTTP trigger block.
+
+![Create](app/images/05.png)
+
 2. In Parametrs set "Anyone" (Who can trigger the flow?)
+
+![Create](app/images/06.png)
 
 ### 2.2 Configure the Parse JSON
 1. Click on "+" after the HTTP trigger block and add block "Parse JSON"
+
+![Create](app/images/07.png)
+
 2. To Content field add "Body" variable through clicking on "Lightning" icon on the right of field
-2. Click **Use sample payload to generate schema**.
-3. Paste the following example JSON:
+
+![Create](app/images/08.png)
+
+3. Click **Use sample payload to generate schema**.
+
+4. Paste the following example JSON:
 ```json
 {
     "@type": "MessageCard",
@@ -117,7 +139,10 @@ This guide explains how to configure Microsoft Power Automate (Flow) to receive 
     "text": "<b>⚠️ Overdue Issue!!!</b>\n<hr/>\n<b>🔖 Subject:</b> <a href=\"http://localhost:3000/issues/11\">🔗 #11 - dfgdsf</a><br/>\n<b>📁 Project:</b> test01<br/>\n<b>🧑 Assignee:</b> Roman Kharcenko<br/>\n<b>📅 Due date:</b> 2025-05-22<br/>\n<hr/>\n<i>The issue is already overdue <b>** 3 days **!</b> It is urgently necessary to perform!!!</i>\n"
 }
 ```
-4. Click Done to auto-generate the schema.
+
+![Create](app/images/09.png)
+
+5. Click Done to auto-generate the schema.
 
 ### 2.3 Add an Action: Post to Microsoft Teams
 1. Click + New Step.
@@ -128,10 +153,21 @@ This guide explains how to configure Microsoft Power Automate (Flow) to receive 
     - Post in: Channel
     - Team: Select your target Team
     - Channel: Select the target Channel
+    - Message: add variable "Body text" for post message
+    - connect to MS Teams with user, that must post messages 
+
+    ![Create](app/images/10.png)
+
+    ![Create](app/images/11.png)
+
+    ![Create](app/images/12.png)
 
 ### 2.4 Save and Get the Webhook URL
 1. Click Save at the top.
 2. Copy the HTTP POST URL that appears in the trigger section.
+
+![Create](app/images/13.png)
+
 3. This is your webhook endpoint. You can now send POST requests to it with your JSON payload.
 
 ---
