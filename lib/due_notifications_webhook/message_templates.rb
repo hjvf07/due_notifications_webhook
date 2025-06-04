@@ -30,5 +30,26 @@ module DueNotificationsWebhook
       HTML
       [title, body]
     end
+
+    def self.before()
+      date_str = Time.zone.now.strftime('%Y-%m-%d %H:%M')
+      title = "#{I18n.t('label_due_notifications_start_alerts')}!!!"
+      body = <<~HTML
+        <hr/>
+          <b>📢📢📢 --> -- > --> #{I18n.t('label_due_notifications_start_alerts')} - #{date_str} <-- <-- <-- 📢📢📢</b>
+        <hr/>
+      HTML
+      [title, body]
+    end
+
+    def self.after()
+      title = "#{I18n.t('label_due_notifications_end_alerts')}!!!"
+      body = <<~HTML
+        <hr/>
+          <b>📢📢📢 --> -- > --> #{I18n.t('label_due_notifications_end_alerts')} <-- <-- <-- 📢📢📢</b>
+        <hr/>
+      HTML
+      [title, body]
+    end
   end
 end
