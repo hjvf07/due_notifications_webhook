@@ -170,6 +170,9 @@ This guide explains how to configure Microsoft Power Automate (Flow) to receive 
 
 3. This is your webhook endpoint. You can now send POST requests to it with your JSON payload.
 
+### 2.5 Put the Webhook URL in to Plugin settings
+1.
+
 ---
 
 ## Structure of the plugin
