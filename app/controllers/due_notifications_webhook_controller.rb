@@ -42,44 +42,62 @@ class DueNotificationsWebhookController < ApplicationController
 
     count_sent = 0
 
-    due_soon_issues.each do |issue|
-      issue_url = Rails.application.routes.url_helpers.issue_url(issue, host: Setting.host_name)
-      days_left = (issue.due_date - today).to_i
-      days_left_text =
-        if days_left == 0
-          "#{label_due_notifications_today}"
-        elsif days_left == 1
-          "#{days_left} #{label_due_notifications_day}"
-        else
-          "#{days_left} #{label_due_notifications_days}"
-        end
-      title, body = DueNotificationsWebhook::MessageTemplates.due_soon(issue, days_left_text, issue_url)
+    if due_soon_issues.any? || overdue_issues.any?
+      # HEADER
+      title, body = DueNotificationsWebhook::MessageTemplates.before()
       DueNotificationsWebhook::TeamsNotifier.send(
         webhook_url,
         title: title,
         body: body
       )
-      count_sent += 1
-    end
 
-    overdue_issues.each do |issue|
-      issue_url = Rails.application.routes.url_helpers.issue_url(issue, host: Setting.host_name)
-      days_overdue = (today - issue.due_date).to_i
-      days_overdue_text =
-        if days_overdue == 0
-          "#{label_due_notifications_today}"
-        elsif days_overdue == 1
-          "#{days_overdue} #{label_due_notifications_day}"
-        else
-          "#{days_overdue} #{label_due_notifications_days}"
-        end
-      title, body = DueNotificationsWebhook::MessageTemplates.overdue(issue, days_overdue_text, issue_url)
+      due_soon_issues.each do |issue|
+        issue_url = Rails.application.routes.url_helpers.issue_url(issue, host: Setting.host_name)
+        days_left = (issue.due_date - today).to_i
+        days_left_text =
+          if days_left == 0
+            "#{label_due_notifications_today}"
+          elsif days_left == 1
+            "#{days_left} #{label_due_notifications_day}"
+          else
+            "#{days_left} #{label_due_notifications_days}"
+          end
+        title, body = DueNotificationsWebhook::MessageTemplates.due_soon(issue, days_left_text, issue_url)
+        DueNotificationsWebhook::TeamsNotifier.send(
+          webhook_url,
+          title: title,
+          body: body
+        )
+        count_sent += 1
+      end
+
+      overdue_issues.each do |issue|
+        issue_url = Rails.application.routes.url_helpers.issue_url(issue, host: Setting.host_name)
+        days_overdue = (today - issue.due_date).to_i
+        days_overdue_text =
+          if days_overdue == 0
+            "#{label_due_notifications_today}"
+          elsif days_overdue == 1
+            "#{days_overdue} #{label_due_notifications_day}"
+          else
+            "#{days_overdue} #{label_due_notifications_days}"
+          end
+        title, body = DueNotificationsWebhook::MessageTemplates.overdue(issue, days_overdue_text, issue_url)
+        DueNotificationsWebhook::TeamsNotifier.send(
+          webhook_url,
+          title: title,
+          body: body
+        )
+        count_sent += 1
+      end
+
+      # FOOTER
+      title, body = DueNotificationsWebhook::MessageTemplates.after()
       DueNotificationsWebhook::TeamsNotifier.send(
         webhook_url,
         title: title,
         body: body
       )
-      count_sent += 1
     end
 
     render json: { message: "#{label_due_notifications_sent}: #{count_sent}" }

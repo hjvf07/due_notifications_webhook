@@ -28,3 +28,5 @@ ja:
   label_due_notifications_webhook_exception: "Teams Webhook 例外:"
   label_due_notifications_today: "今日"
   label_due_notifications_day: "日"
+  label_due_notifications_start_alerts: "アラート開始"
+  label_due_notifications_end_alerts:  "アラート終了"

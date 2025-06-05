@@ -28,3 +28,5 @@ uk:
   label_due_notifications_webhook_exception: "Виняток Microsoft Teams Webhook:"
   label_due_notifications_today: "сьогодні"
   label_due_notifications_day: "дeнь"
+  label_due_notifications_start_alerts: "Початок сповіщень"
+  label_due_notifications_end_alerts: "Завершення сповіщень"
