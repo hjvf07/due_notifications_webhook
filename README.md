@@ -215,5 +215,7 @@ redmine_due_notifications_webhook/
 > **Running the test**
 
 ```sh
-bin/rspec plugins/due_notifications_webhook/spec/lib/teams_notifier_spec.rb
+RAILS_ENV=test bin/rspec plugins/due_notifications_webhook/spec/lib/teams_notifier_spec.rb
+
+RAILS_ENV=test bin/rspec --format documentation plugins/due_notifications_webhook/spec/lib/teams_notifier_spec.rb
 ```
