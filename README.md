@@ -164,12 +164,17 @@ This guide explains how to configure Microsoft Power Automate (Flow) to receive 
 
 ### 2.4 Save and Get the Webhook URL
 1. Click Save at the top.
-2. Copy the HTTP POST URL that appears in the trigger section.
+2. Copy the HTTP URL that appears in the trigger section.
 
 ![Create](app/images/13.png)
 
-3. This is your webhook endpoint. You can now send POST requests to it with your JSON payload.
+3. This is your webhook endpoint.
 
+### 2.5 Put the Webhook URL in to Plugin settings
+1. Open settings of plugin "Due notifications Webhook"
+2. Put the Webhook URL in field "Microsoft Teams Webhook Url"
+![Create](app/images/14.png)
+3. Click on "Apply" for save settings.
 ---
 
 ## Structure of the plugin
